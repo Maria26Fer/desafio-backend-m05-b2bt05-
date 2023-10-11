@@ -20,7 +20,7 @@ const cadastrarUsuario = async (req, res) => {
     }
 
     try {
-        const conferirEmail = await knex('usuarios').where({ email });
+        const conferirEmail = await knex('usuario').where({ email });
 
         if (conferirEmail.length > 0) {
             return res.status(401).json({ mensagem: 'Esse e-mail já está cadastrado.' });
@@ -28,13 +28,13 @@ const cadastrarUsuario = async (req, res) => {
 
         const criptografarSenha = await bcrypt.hash(senha, 10);
 
-        const preencher = await knex('usuarios').insert({ nome, email, senha: criptografarSenha });
+        const preencher = await knex('usuario').insert({ nome, email, senha: criptografarSenha });
 
         if (preencher.rowCount === 0) {
             return res.status(500).json({ mensagem: 'Usuário não pôde ser cadastrado! Preencha todos os campos obrigatórios!!' });
         }
 
-        const novoUsuario = await knex('usuarios').where({ email }).first();
+        const novoUsuario = await knex('usuario').where({ email }).first();
 
         const { senha: _, ...dadosObrigatorios } = novoUsuario;
 
