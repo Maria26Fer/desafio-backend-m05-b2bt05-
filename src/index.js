@@ -1,8 +1,13 @@
-const express = require('express');
+const express = require("express");
+const knex = require("./conexao");
+
 const app = express();
 
 app.use(express.json());
 
-app.get('/',(req, res) => res.json({mensagem: 'Ok!'}))
+app.get("/categoria", async (req, res) => {
+  const categorias = await knex("categorias");
+  return res.json(categorias);
+});
 
 app.listen(3000);
