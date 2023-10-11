@@ -18,5 +18,8 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.0.1",
     "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
