@@ -1,6 +1,6 @@
 const knex = require('../conexao');
 const bcrypt = require('bcrypt');
-const Joi = require('joi');
+const joi = require('joi');
 
 require('dotenv').config();
 
