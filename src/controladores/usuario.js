@@ -102,7 +102,22 @@ const login = async (req, res) => {
   }
 };
 
+const detalharPerfil = async (req, res) => {
+  const id = req.usuario.id;
+  try {
+    const usuario = await knex("usuarios").where("id", id).first();
+
+    if (!usuario) {
+      return res.status(404).json({ mensagem: "Usuario não encontrado." });
+    }
+    return res.status(200).json({ mensagem: usuario });
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message });
+  }
+};
+
 module.exports = {
   cadastrarUsuario,
   login,
+  detalharPerfil,
 };

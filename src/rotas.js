@@ -1,5 +1,9 @@
 const express = require("express");
-const { cadastrarUsuario, login } = require("./controladores/usuario");
+const {
+  cadastrarUsuario,
+  login,
+  detalharPerfil,
+} = require("./controladores/usuario");
 const checaToken = require("./intermediarios/autenticacao");
 const knex = require("./conexao");
 
@@ -15,5 +19,7 @@ rotas.post("/usuario", cadastrarUsuario);
 rotas.post("/login", login);
 
 rotas.use(checaToken);
+
+rotas.get("/usuario", detalharPerfil);
 
 module.exports = rotas;
