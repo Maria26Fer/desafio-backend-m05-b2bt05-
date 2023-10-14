@@ -74,6 +74,7 @@ const login = async (req, res) => {
   try {
     await camposObrigatorios.validateAsync(req.body);
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ mensagem: error.message });
   }
 
@@ -98,6 +99,7 @@ const login = async (req, res) => {
 
     return res.json({ usuario: usuarioLogado, token });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ mensagem: "Erro interno do servidor" });
   }
 };
