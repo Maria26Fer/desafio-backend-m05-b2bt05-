@@ -3,17 +3,15 @@ const {
   cadastrarUsuario,
   login,
   detalharPerfil,
-  editarUsuario
+  editarUsuario,
 } = require("./controladores/usuario");
 const checaToken = require("./intermediarios/autenticacao");
 const knex = require("./conexao");
+const { listarCategorias } = require("./controladores/categorias");
 
 const rotas = express();
 
-rotas.get("/categoria", async (req, res) => {
-  const categorias = await knex("categorias");
-  return res.json(categorias);
-});
+rotas.get("/categoria", listarCategorias);
 
 rotas.post("/usuario", cadastrarUsuario);
 
