@@ -103,61 +103,11 @@ const login = async (req, res) => {
   }
 };
 
-const editarPerfil = async (req, res) => {
-  const { nome, email, senha } = req.body;
-  const { id } = req.user; 
-
-  const camposObrigatorios = joi.object({
-    nome: joi.string().required(),
-    email: joi.string().email().required(),
-    senha: joi.string().min(5).required(),
-  });
-
-  try {
-    await camposObrigatorios.validateAsync(req.body);
-  } catch (error) {
-    return res.status(400).json({ mensagem: "Os campos nome, email e senha são obrigatórios!" });
-  }
-
-  try {
-    
-    const conferirEmail = await knex("usuarios").where({ email }).whereNot({ id });
-
-    if (conferirEmail.length > 0) {
-      return res.status(400).json({ mensagem: "Esse e-mail já está cadastrado." });
-    }
-
-    const criptografarSenha = await bcrypt.hash(senha, 10);
-
-    
-    const resultado = await knex("usuarios")
-      .where({ id })
-      .update({
-        nome,
-        email,
-        senha: criptografarSenha,
-      });
-
-    if (resultado === 0) {
-      return res.status(400).json({
-        mensagem: "Perfil do usuário não pôde ser atualizado! Verifique os campos obrigatórios!",
-      });
-    }
-
-    const novoUsuario = await knex("usuarios").where({ id }).first();
-
-    const { senha: _, ...dadosObrigatorios } = novoUsuario;
-
-    return res.status(200).json(dadosObrigatorios);
-  } catch (error) {
-    return res.status(500).json({ mensagem: "Erro interno do servidor" });
-  }
-};
 
 
 module.exports = {
   cadastrarUsuario,
   login,
-  detalharPerfil,
-  editarPerfil
+  detalharPerfil
+  
 };
