@@ -118,13 +118,8 @@ const detalharPerfil = async (req, res) => {
 
 const editarUsuario = async (req, res) => {
   const { nome, email, senha } = req.body;
-  const { id } = req.user; 
+  const { id } = req.usuario; 
 
-  const camposObrigatorios = joi.object({
-    nome: joi.string().required(),
-    email: joi.string().email().required(),
-    senha: joi.string().min(5).required(),
-  });
 
   try {
     await camposObrigatorios.validateAsync(req.body);
