@@ -23,6 +23,6 @@ rotas.use(checaToken);
 
 rotas.get("/usuario", detalharPerfil);
 
-rotas.get("/usuario", editarUsuario);
+rotas.put("/usuario", editarUsuario);
 
 module.exports = rotas;
