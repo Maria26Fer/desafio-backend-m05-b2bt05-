@@ -118,41 +118,56 @@ const detalharPerfil = async (req, res) => {
 
 const editarUsuario = async (req, res) => {
   const { nome, email, senha } = req.body;
-  const { id } = req.usuario; 
+  const { id } = req.usuario;
 
+  const camposObrigatorios = joi.object({
+    nome: joi.string().required().messages({
+      "any.required": "O campo nome é obrigatório",
+      "string.empty": "O campo nome é obrigatório",
+    }),
+    email: joi.string().email().required().messages({
+      "any.required": "O campo email é obrigatório",
+      "string.email": "Digite um email válido",
+      "string.empty": "O campo email é obrigatório",
+    }),
+    senha: joi.string().required().messages({
+      "any.required": "O campo senha é obrigatório",
+      "string.empty": "O campo senha é obrigatório",
+    }),
+  });
 
   try {
     await camposObrigatorios.validateAsync(req.body);
   } catch (error) {
-    return res.status(400).json({ mensagem: "Os campos nome, email e senha são obrigatórios!" });
+    return res.status(400).json({ mensagem: error.message });
   }
 
   try {
-    
-    const conferirEmail = await knex("usuarios").where({ email }).whereNot({ id });
+    const conferirEmail = await knex("usuarios")
+      .where({ email })
+      .whereNot({ id });
 
     if (conferirEmail.length > 0) {
-      return res.status(400).json({ mensagem: "Esse e-mail já está cadastrado." });
+      return res
+        .status(400)
+        .json({ mensagem: "Esse e-mail já está cadastrado." });
     }
 
     const criptografarSenha = await bcrypt.hash(senha, 10);
 
-  
-    const resultado = await knex("usuarios")
-      .where({ id })
-      .update({
-        nome,
-        email,
-        senha: criptografarSenha,
-      });
+    const resultado = await knex("usuarios").where({ id }).update({
+      nome,
+      email,
+      senha: criptografarSenha,
+    });
 
     if (resultado === 0) {
       return res.status(400).json({
-        mensagem: "Perfil do usuário não pôde ser atualizado! Verifique os campos obrigatórios!",
+        mensagem:
+          "Perfil do usuário não pôde ser atualizado! Verifique os campos obrigatórios!",
       });
     }
 
-   
     const novoUsuario = await knex("usuarios").where({ id }).first();
 
     const { senha: _, ...dadosObrigatorios } = novoUsuario;
@@ -163,11 +178,9 @@ const editarUsuario = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   cadastrarUsuario,
   login,
   detalharPerfil,
-  editarUsuario
+  editarUsuario,
 };
