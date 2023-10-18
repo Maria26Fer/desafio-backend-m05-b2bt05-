@@ -17,7 +17,7 @@ rotas.post("/usuario", cadastrarUsuario);
 
 rotas.post("/login", login);
 
-rotas.use(checaToken);
+//rotas.use(checaToken);
 
 rotas.get("/usuario", detalharPerfil);
 
