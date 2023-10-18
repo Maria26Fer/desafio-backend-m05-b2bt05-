@@ -15,13 +15,19 @@ const cadastrarCliente = async (req, res) => {
       "string.email": "Digite um email válido",
       "string.empty": "O campo email é obrigatório",
     }),
-    cpf: joi.string().min(11).required().messages({
+    cpf: joi.string().min(11).max(11).required().messages({
       "any.required": "O campo CPF é obrigatório",
       "string.empty": "O campo CPF é obrigatório",
-      "string.min": "O campo CPF precisa conter, no mínimo, 11 caracteres",
+      "string.min":
+        "O campo CPF precisa conter, no mínimo, 11 caracteres, sem pontuação",
+      "string.max":
+        "O campo CPF precisa conter, no máximo, 11 caracteres, sem pontuação",
     }),
-    cep: joi.string().min(8).default(null).messages({
-      "string.min": "O campo CEP precisa conter, no mínimo, 8 caracteres",
+    cep: joi.string().min(8).max(8).default(null).messages({
+      "string.min":
+        "O campo CEP precisa conter, no mínimo, 8 caracteres, sem pontuação",
+      "string.max":
+        "O campo CPF precisa conter, no máximo, 8 caracteres, sem pontuação",
     }),
     rua: joi.string().default(null),
     numero: joi.string().default(null),
