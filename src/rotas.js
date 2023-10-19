@@ -8,7 +8,7 @@ const {
 const checaToken = require("./intermediarios/autenticacao");
 const { listarCategorias } = require("./controladores/categorias");
 const { cadastrarCliente, editarCliente } = require("./controladores/cliente");
-const { cadastrarProduto } = require("./controladores/produtos");
+const { cadastrarProduto, editarProduto, listarProduto } = require("./controladores/produtos");
 
 const rotas = express();
 
@@ -27,5 +27,9 @@ rotas.post("/cliente", cadastrarCliente);
 rotas.put("/cliente/:id", editarCliente);
 
 rotas.post("/produto", cadastrarProduto);
+rotas.put("/produto/:id", editarProduto);
+rotas.get("/produto", listarProduto);
 
 module.exports = rotas;
+
+
