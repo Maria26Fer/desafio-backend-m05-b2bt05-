@@ -20,10 +20,6 @@ const cadastrarProduto = async (req, res) => {
       "number.base": "O campo id da categoria dever ser um número.",
       "any.required": "O campo id da categoria deve ser informado.",
     }),
-    descricao: joi.string().default(null),
-    quantidade_estoquet: joi.number().default(null),
-    valor: joi.number().default(null),
-    categoria_id: joi.number().default(null),
   });
 
   try {
