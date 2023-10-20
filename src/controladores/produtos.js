@@ -116,17 +116,28 @@ const editarProduto = async (req, res) => {
 const listarProduto = async (req, res) => {
   const { categoria_id } = req.query;
 
-
   try {
-    let query = knex('produtos');
+
+    // testar se a categgoria existir
+    // filtrar e listar
+    // se não, listar todos 
+    // um if dentro do outro
+    // if categoria informada, 2º  
 
     if (categoria_id) {
-      query.where('categoria_id', categoria_id);
+
+      const categoriaExiste = await knex("produtos").where(
+        "categoria_id",
+        categoria_id
+      );
+      if (categoriaExiste.length > 0) {
+        return res.status(200).json({ produtos: categoriaExiste });
+      }
     }
+    const produtos = await knex("produtos").select("*");
 
-    const produtos = await query.select('*');
+    return res.status(200).json({ produtos });
 
-    res.status(200).json({ produtos });
   } catch (error) {
     res.status(500).json({ mensagem: 'Erro interno no servidor' });
 
