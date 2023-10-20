@@ -59,11 +59,35 @@ const editarProduto = async (req, res) => {
   const { id } = req.params;
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
+  const camposObrigatorios = joi.object({
+    descricao: joi.string().required().messages({
+      "any.required": "O campo descrição deve ser informado.",
+    }),
+    quantidade_estoque: joi.number().required().messages({
+      "number.base": "O campo quantidade_estoque dever ser um número.",
+      "any.required": "O campo quantidade_estoque deve ser informado.",
+    }),
+    valor: joi.number().required().messages({
+      "number.base": "O campo valor dever ser um número.",
+      "any.required": "O campo valor deve ser informado.",
+    }),
+    categoria_id: joi.number().required().messages({
+      "number.base": "O campo id da categoria dever ser um número.",
+      "any.required": "O campo id da categoria deve ser informado.",
+    }),
+  });
+
+  try {
+    await camposObrigatorios.validateAsync(req.body);
+  } catch (error) {
+    return res.status(400).json({ mensagem: error.message });
+  }
+
   try {
     const produtoId = await knex("produtos").where("id", id);
 
     if (produtoId.length === 0) {
-      return res.status(400).json({ mensagem: "O id não foi encontrado" });
+      return res.status(400).json({ mensagem: "O id do produto não foi encontrado" });
     }
 
     const produtoCadastrado = await knex('produtos')
