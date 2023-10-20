@@ -84,27 +84,34 @@ const editarProduto = async (req, res) => {
   }
 
   try {
-    const categoriaId = await knex("produtos").where("categoria_id", categoria_id);
+    const categoriaId = await knex("produtos").where(
+      "categoria_id",
+      categoria_id
+    );
 
     if (categoriaId.length === 0) {
-      return res.status(400).json({ mensagem: "O id da categoria não foi encontrado" });
+      return res
+        .status(400)
+        .json({ mensagem: "O id da categoria não foi encontrado" });
     }
 
     const produtoId = await knex("produtos").where("id", id);
 
     if (produtoId.length === 0) {
-      return res.status(400).json({ mensagem: "O id do produto não foi encontrado" });
+      return res
+        .status(400)
+        .json({ mensagem: "O id do produto não foi encontrado" });
     }
 
-    const produtoCadastrado = await knex('produtos')
+    const produtoCadastrado = await knex("produtos")
       .update({
         descricao,
         quantidade_estoque,
         valor,
         categoria_id,
       })
-      .where('id', id)
-      .returning('*');
+      .where("id", id)
+      .returning("*");
 
     return res.json(produtoCadastrado);
   } catch (error) {
@@ -112,20 +119,11 @@ const editarProduto = async (req, res) => {
   }
 };
 
-
 const listarProduto = async (req, res) => {
   const { categoria_id } = req.query;
 
   try {
-
-    // testar se a categgoria existir
-    // filtrar e listar
-    // se não, listar todos 
-    // um if dentro do outro
-    // if categoria informada, 2º  
-
     if (categoria_id) {
-
       const categoriaExiste = await knex("produtos").where(
         "categoria_id",
         categoria_id
@@ -137,15 +135,34 @@ const listarProduto = async (req, res) => {
     const produtos = await knex("produtos").select("*");
 
     return res.status(200).json({ produtos });
-
   } catch (error) {
-    res.status(500).json({ mensagem: 'Erro interno no servidor' });
+    return res.status(500).json({ mensagem: "Erro interno no servidor" });
+  }
+};
 
-  };
-}
+const excluirProduto = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const produtoExiste = await knex("produtos").where({ id });
+
+    if (produtoExiste.length === 0) {
+      return res.status(400).json({ mensagem: "Produto não encontrado" });
+    }
+
+    const produtoExcluido = await knex("produtos")
+      .where({ id })
+      .del()
+      .returning("*");
+
+    return res.status(200).json({ produtoExcluido });
+  } catch (error) {
+    return res.status(500).json({ mensagem: "Erro interno no servidor" });
+  }
+};
 
 module.exports = {
   cadastrarProduto,
   editarProduto,
-  listarProduto
+  listarProduto,
+  excluirProduto,
 };
