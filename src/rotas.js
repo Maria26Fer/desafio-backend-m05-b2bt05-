@@ -7,7 +7,7 @@ const {
 } = require("./controladores/usuario");
 const checaToken = require("./intermediarios/autenticacao");
 const { listarCategorias } = require("./controladores/categorias");
-const { cadastrarCliente, editarCliente } = require("./controladores/cliente");
+const { cadastrarCliente, editarCliente, listarCliente } = require("./controladores/cliente");
 const { cadastrarProduto } = require("./controladores/produtos");
 
 const rotas = express();
@@ -25,6 +25,7 @@ rotas.put("/usuario", editarUsuario);
 
 rotas.post("/cliente", cadastrarCliente);
 rotas.put("/cliente/:id", editarCliente);
+rotas.get("/cliente", listarCliente);
 
 rotas.post("/produto", cadastrarProduto);
 

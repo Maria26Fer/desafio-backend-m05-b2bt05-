@@ -159,7 +159,25 @@ const editarCliente = async (req, res) => {
     return res.status(500).json({ mensagem: "Erro interno do servidor" });
   }
 };
+
+const listarCliente = async (req, res) => {
+ 
+    const clientes = await knex('clientes');
+    return res.status(200).json({ clientes });
+  };
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
   cadastrarCliente,
   editarCliente,
+  listarCliente
 };
