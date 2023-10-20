@@ -169,10 +169,8 @@ const listarCliente = async (req, res) => {
   const detalharCliente = async (req, res) => {
     const { id } = req.params;
 
-    const cliente = cliente.find(function (item){
-        item.id === id;
-    });
-
+    const cliente = await knex('cliente').where({ id })
+     
     if ( cliente ) {
       return res.status(200).json(cliente);
 
