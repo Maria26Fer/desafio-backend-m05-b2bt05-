@@ -57,41 +57,26 @@ const cadastrarProduto = async (req, res) => {
 
 const editarProduto = async (req, res) => {
   const { id } = req.params;
-  const { usuarioLogado } = req;
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
   try {
-    const produtoEncontrado = await knex('produtos')
+    const produtoId = await knex("produtos").where("id", id);
+
+    if (produtoId.length === 0) {
+      return res.status(400).json({ mensagem: "O id não foi encontrado" });
+    }
+
+    const produtoCadastrado = await knex('produtos')
+      .update({
+        descricao,
+        quantidade_estoque,
+        valor,
+        categoria_id,
+      })
       .where('id', id)
-      .first()
       .returning('*');
 
-    if (produtoEncontrado) {
-      return res.status(401).json({ mensagem: "Já há um produto cadastrado com esse id" });
-    }
-
-    try {
-      const categoriaId = await knex("produtos").where("categoria_id", categoria_id);
-
-      if (categoriaId.length === 0) {
-        return res.status(400).json({ mensagem: "O id da categoria não foi encontrado" });
-      }
-
-      const produtoCadastrado = await knex('produtos')
-        .update({
-          id_usuario: usuarioLogado.id,
-          descricao,
-          quantidade_estoque,
-          valor,
-          categoria_id,
-        })
-        .where('id', id)
-        .returning('*');
-
-      return res.json(produtoCadastrado);
-    } catch (error) {
-      return res.status(500).json({ mensagem: "Erro interno no servidor" });
-    }
+    return res.json(produtoCadastrado);
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno no servidor" });
   }
