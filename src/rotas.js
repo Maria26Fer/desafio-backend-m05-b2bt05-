@@ -7,8 +7,17 @@ const {
 } = require("./controladores/usuario");
 const checaToken = require("./intermediarios/autenticacao");
 const { listarCategorias } = require("./controladores/categorias");
-const { cadastrarCliente, editarCliente, listarCliente } = require("./controladores/cliente");
-const { cadastrarProduto, editarProduto, listarProduto } = require("./controladores/produtos");
+const {
+  cadastrarCliente,
+  editarCliente,
+  listarCliente,
+} = require("./controladores/cliente");
+const {
+  cadastrarProduto,
+  editarProduto,
+  listarProduto,
+  excluirProduto,
+} = require("./controladores/produtos");
 
 const rotas = express();
 
@@ -30,6 +39,6 @@ rotas.get("/cliente", listarCliente);
 rotas.post("/produto", cadastrarProduto);
 rotas.put("/produto/:id", editarProduto);
 rotas.get("/produto", listarProduto);
+rotas.delete("/produto/:id", excluirProduto);
 
 module.exports = rotas;
-
