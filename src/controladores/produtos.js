@@ -9,8 +9,8 @@ const cadastrarProduto = async (req, res) => {
       "any.required": "O campo descrição deve ser informado.",
     }),
     quantidade_estoque: joi.number().required().messages({
-      "number.base": "O campo quantidade_estoque dever ser um número.",
-      "any.required": "O campo quantidade_estoque deve ser informado.",
+      "number.base": "O campo quantidade de estoque dever ser um número.",
+      "any.required": "O campo quantidade de estoque deve ser informado.",
     }),
     valor: joi.number().required().messages({
       "number.base": "O campo valor dever ser um número.",
@@ -64,8 +64,8 @@ const editarProduto = async (req, res) => {
       "any.required": "O campo descrição deve ser informado.",
     }),
     quantidade_estoque: joi.number().required().messages({
-      "number.base": "O campo quantidade_estoque dever ser um número.",
-      "any.required": "O campo quantidade_estoque deve ser informado.",
+      "number.base": "O campo quantidade de estoque dever ser um número.",
+      "any.required": "O campo quantidade de estoque deve ser informado.",
     }),
     valor: joi.number().required().messages({
       "number.base": "O campo valor dever ser um número.",
@@ -84,6 +84,12 @@ const editarProduto = async (req, res) => {
   }
 
   try {
+    const categoriaId = await knex("produtos").where("categoria_id", categoria_id);
+
+    if (categoriaId.length === 0) {
+      return res.status(400).json({ mensagem: "O id da categoria não foi encontrado" });
+    }
+
     const produtoId = await knex("produtos").where("id", id);
 
     if (produtoId.length === 0) {
@@ -108,18 +114,12 @@ const editarProduto = async (req, res) => {
 
 
 const listarProduto = async (req, res) => {
-  const { usuarioLogado } = req;
   const { categoria_id } = req.query;
 
   try {
-    const usuarioLogadoId = knex("produtos").where("id_usuario", usuarioLogado.id);
 
-    if (categoria_id) {
-      usuarioLogadoId.where("categoria_id", categoria_id);
-    }
 
-    const produtos = await usuarioLogadoId.returning("*");
-    return res.json(produtos);
+
   } catch (error) {
     return res.status(500).json({ mensagem: "Erro interno no servidor" });
   }
