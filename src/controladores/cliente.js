@@ -166,10 +166,19 @@ const listarCliente = async (req, res) => {
     return res.status(200).json({ clientes });
   };
 
+  const detalharCliente = async (req, res) => {
+    const { id } = req.params;
 
+    const cliente = cliente.find(function (item){
+        item.id === id;
+    });
 
+    if ( cliente ) {
+      return res.status(200).json(cliente);
 
+    } return res.status(404).json({message:'Não foi encontrado'});
 
+  };
 
 
 
@@ -179,5 +188,6 @@ const listarCliente = async (req, res) => {
 module.exports = {
   cadastrarCliente,
   editarCliente,
-  listarCliente
+  listarCliente,
+  detalharCliente
 };

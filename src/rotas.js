@@ -11,6 +11,7 @@ const {
   cadastrarCliente,
   editarCliente,
   listarCliente,
+  detalharCliente
 } = require("./controladores/cliente");
 const {
   cadastrarProduto,
@@ -35,6 +36,8 @@ rotas.put("/usuario", editarUsuario);
 rotas.post("/cliente", cadastrarCliente);
 rotas.put("/cliente/:id", editarCliente);
 rotas.get("/cliente", listarCliente);
+rotas.get("/cliente/:id", detalharCliente);
+
 
 rotas.post("/produto", cadastrarProduto);
 rotas.put("/produto/:id", editarProduto);
