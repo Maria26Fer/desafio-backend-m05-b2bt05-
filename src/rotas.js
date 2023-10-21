@@ -18,6 +18,7 @@ const {
   editarProduto,
   listarProduto,
   excluirProduto,
+  detalharProduto
 } = require("./controladores/produtos");
 
 const rotas = express();
@@ -42,6 +43,7 @@ rotas.get("/cliente/:id", detalharCliente);
 rotas.post("/produto", cadastrarProduto);
 rotas.put("/produto/:id", editarProduto);
 rotas.get("/produto", listarProduto);
+rotas.get("/produto/:id", detalharProduto);
 rotas.delete("/produto/:id", excluirProduto);
 
 module.exports = rotas;
