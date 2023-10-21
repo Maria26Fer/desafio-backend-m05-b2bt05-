@@ -9,9 +9,19 @@ const cadastrarUsuario = async (req, res) => {
   const { nome, email, senha } = req.body;
 
   const camposObrigatorios = joi.object({
-    nome: joi.string().required(),
-    email: joi.string().email().required(),
-    senha: joi.string().min(5).required(),
+    nome: joi.string().required().messages({
+      "any.required": "O campo nome é obrigatório",
+      "string.empty": "O campo nome é obrigatório",
+    }),
+    email: joi.string().email().required().messages({
+      "any.required": "O campo email é obrigatório",
+      "string.email": "Digite um email válido",
+      "string.empty": "O campo email é obrigatório",
+    }),
+    senha: joi.string().min(5).required().messages({
+      "any.required": "O campo senha é obrigatório",
+      "string.empty": "O campo senha é obrigatório",
+    }),
   });
 
   try {
@@ -19,7 +29,7 @@ const cadastrarUsuario = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ mensagem: "Os campos nome, email e senha são obrigatórios!" });
+      .json({ mensagem: error.message });
   }
 
   try {
