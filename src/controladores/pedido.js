@@ -8,15 +8,15 @@ const cadastrarPedido = async (req, res) => {
 
     const camposObrigatorios = joi.object({
         cliente_id: joi.number().required().messages({
-            "any.required": "O campo cliente_id é obrigatório",
-            "number.empty": "O campo cliente_id é obrigatório",
+            "any.required": "O campo de ID do cliente é obrigatório",
+            "number.empty": "O campo de ID do cliente é obrigatório",
         }),
         pedido_produtos: joi.array().items(joi.object({
             produto_id: joi.number().required(),
             quantidade_produto: joi.number().required()
         })).required().messages({
-            "any.required": "O campo pedido_produtos é obrigatório",
-            "array.base": "O campo pedido_produtos deve ser um array",
+            "any.required": "O campo de produtos pedidos é obrigatório.",
+            "array.base": "O campo de produtos pedidos deve ser uma lista.",
         }),
         observacao: joi.string(),
     });
@@ -28,13 +28,13 @@ const cadastrarPedido = async (req, res) => {
     }
 
     try {
-        const cliente = await knex('cliente').where({ id: cliente_id }).first();
+        const cliente = await knex('clientes').where({ id: cliente_id }).first();
 
         if (!cliente) {
             return res.status(400).json({ mensagem: "Cliente não encontrado." });
         }
 
-        let valorTotal = 0;
+        let valor_total = 0;
 
         for (const item of pedido_produtos) {
             const produto = await knex('produtos').where({ id: item.produto_id }).first();
@@ -57,13 +57,13 @@ const cadastrarPedido = async (req, res) => {
                 return res.status(500).json({ mensagem: "Não foi possível atualizar o estoque." });
             }
 
-            valorTotal += produto.valor;
+            valor_total += produto.valor;
         }
 
         const registrarTabelaPedidos = await knex('pedidos').insert({
             cliente_id,
             observacao,
-            valorTotal
+            valor_total
         });
 
         if (!registrarTabelaPedidos) {
