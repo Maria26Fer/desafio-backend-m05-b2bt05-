@@ -23,6 +23,7 @@ const {
 
 const {
   cadastrarPedido,
+  listarPedido
 } = require("./controladores/pedido");
 
 const rotas = express();
@@ -51,5 +52,6 @@ rotas.get("/produto/:id", detalharProduto);
 rotas.delete("/produto/:id", excluirProduto);
 
 rotas.post("/pedido", cadastrarPedido);
+rotas.get("/pedido", listarPedido);
 
 module.exports = rotas;
