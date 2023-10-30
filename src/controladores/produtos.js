@@ -1,8 +1,10 @@
 const knex = require("../conexao");
 const joi = require("joi");
+const { uploadImagem } = require("../servicos/uploads");
 
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
+  const { originalname, buffer } = req.file;
 
   const camposObrigatorios = joi.object({
     descricao: joi.string().required().messages({
@@ -40,12 +42,15 @@ const cadastrarProduto = async (req, res) => {
         .json({ mensagem: "O id da categoria não foi encontrado" });
     }
 
+    const upload = await uploadImagem(originalname, buffer);
+
     const inserirProduto = await knex("produtos")
       .insert({
         descricao,
         quantidade_estoque,
         valor,
         categoria_id,
+        produto_imagem: upload.url,
       })
       .returning("*");
 

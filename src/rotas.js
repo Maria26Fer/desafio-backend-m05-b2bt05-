@@ -25,6 +25,7 @@ const {
   cadastrarPedido,
   listarPedido
 } = require("./controladores/pedido");
+const multer = require("multer");
 
 const rotas = express();
 
@@ -45,7 +46,7 @@ rotas.get("/cliente", listarCliente);
 rotas.get("/cliente/:id", detalharCliente);
 
 
-rotas.post("/produto", cadastrarProduto);
+rotas.post("/produto", multer.single('produto_imagem'), cadastrarProduto);
 rotas.put("/produto/:id", editarProduto);
 rotas.get("/produto", listarProduto);
 rotas.get("/produto/:id", detalharProduto);
